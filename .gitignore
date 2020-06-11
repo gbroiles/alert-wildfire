@@ -129,5 +129,6 @@ dmypy.json
 .pyre/
 
 # local stuff
-.jpg
-.jpeg
+*.jpg
+*.jpeg
+*.out

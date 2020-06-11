@@ -4,10 +4,10 @@ import requests
 HOST = "https://s3-us-west-2.amazonaws.com"
 # URLBASE = "/alertwildfire-data-public/Axis-Elsinore2/latest_full.jpg?x-request-time="
 URLBASE = "/alertwildfire-data-public/"
-CAMERA = "Axis-Elsinore1"
+CAMERA = "Axis-PineCreek"
 FILENAME = "latest_full.jpg"
 HEADERS = {
-    "referer": "http://www.alertwildfire.org/inlandempire/index.html?camera=Axis-Elsinore2&v=81e002f",
+    "referer": "http://www.alertwildfire.org/shastamodoc/index.html?camera=AxisPineCreek&v=81e002f",
     "user-agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
 }
 
