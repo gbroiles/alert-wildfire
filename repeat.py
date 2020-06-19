@@ -1,16 +1,14 @@
+#!/usr/bin/python3
+#
 import argparse
 import datetime
 import time
-import requests
 import sys
+import requests
 
-
-# COUNT = 999
-# DELAY = 15
 
 HOST = "https://s3-us-west-2.amazonaws.com"
 URLBASE = "/alertwildfire-data-public/Axis-"
-# CAMERA = "HollySugar2"
 FILENAME = "latest_full.jpg"
 HEADERS = {
     "referer": "http://www.alertwildfire.org/shastamodoc/index.html?camera=AxisPineCreek&v=81e002f",
@@ -18,7 +16,7 @@ HEADERS = {
 }
 
 
-def get_image(filenumber):
+def get_image():
     TIMESTAMP = str(int(datetime.datetime.utcnow().timestamp()))
     MYSTRING = "{}{}{}/{}".format(HOST, URLBASE, camera, FILENAME)
     while True:
@@ -40,15 +38,10 @@ def get_image(filenumber):
             print("OOps: Something Else", err)
         time.sleep(60)
 
-    #    filenum = "{:04d}".format(filenumber)
-    #    with open((camera + "-" + TIMESTAMP + ".jpg"), "wb") as fd:
     filename = camera + "-" + TIMESTAMP + ".jpg"
     with open(filename, "wb") as fd:
         for chunk in r.iter_content(chunk_size=128):
             fd.write(chunk)
-
-
-#    print(CAMERA + "-" + filenum + ".jpg written.")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("camera", help="Camera name to capture")
@@ -56,14 +49,13 @@ parser.add_argument("count", help="Number of frames to capture")
 parser.add_argument("delay", help="Delay in seconds between frame captures")
 
 args = parser.parse_args()
-
 camera = args.camera
 count = int(args.count)
 delay = float(args.delay)
 
 
 for i in range(count):
-    get_image(i)
+    get_image()
     try:
         time.sleep(delay)
     except KeyboardInterrupt:

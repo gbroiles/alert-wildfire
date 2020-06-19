@@ -85,9 +85,7 @@ CAMERAS = [
 ]
 
 HOST = "https://s3-us-west-2.amazonaws.com"
-# URLBASE = "/alertwildfire-data-public/Axis-Elsinore2/latest_full.jpg?x-request-time="
 URLBASE = "/alertwildfire-data-public/Axis-"
-# CAMERA = "PineCreek"
 FILENAME = "latest_full.jpg"
 HEADERS = {
     "referer": "http://www.alertwildfire.org/shastamodoc/index.html?camera=AxisPineCreek&v=81e002f",
@@ -95,15 +93,11 @@ HEADERS = {
 }
 
 
+timestamp = str(int(datetime.datetime.utcnow().timestamp()))
+
 for camera in CAMERAS:
-    timestamp = str(int(datetime.datetime.utcnow().timestamp()))
     mystring = "{}{}{}/{}".format(HOST, URLBASE, camera, FILENAME)
-    #    print(mystring)
-    #    continue
 
-    #    r = ""
-
-    #    r = requests.get(mystring, headers=HEADERS, verify=False)
     r = requests.get(mystring, headers=HEADERS)
 
     if r.status_code == 200:
