@@ -18,10 +18,6 @@ HEADERS = {
 }
 
 
-
-
-
-
 def get_image(filenumber):
     TIMESTAMP = str(int(datetime.datetime.utcnow().timestamp()))
     MYSTRING = "{}{}{}/{}".format(HOST, URLBASE, camera, FILENAME)
@@ -44,8 +40,8 @@ def get_image(filenumber):
             print("OOps: Something Else", err)
         time.sleep(60)
 
-#    filenum = "{:04d}".format(filenumber)
-#    with open((camera + "-" + TIMESTAMP + ".jpg"), "wb") as fd:
+    #    filenum = "{:04d}".format(filenumber)
+    #    with open((camera + "-" + TIMESTAMP + ".jpg"), "wb") as fd:
     filename = camera + "-" + TIMESTAMP + ".jpg"
     with open(filename, "wb") as fd:
         for chunk in r.iter_content(chunk_size=128):
