@@ -1,32 +1,30 @@
+import argparse
 import datetime
 import time
 import requests
+import sys
 
 
-COUNT = 999
-DELAY = 120
+# COUNT = 999
+# DELAY = 15
 
 HOST = "https://s3-us-west-2.amazonaws.com"
-# URLBASE = "/alertwildfire-data-public/Axis-Elsinore2/latest_full.jpg?x-request-time="
-URLBASE = "/alertwildfire-data-public/"
-CAMERA = "Axis-PineCreek"
+URLBASE = "/alertwildfire-data-public/Axis-"
+# CAMERA = "HollySugar2"
 FILENAME = "latest_full.jpg"
 HEADERS = {
     "referer": "http://www.alertwildfire.org/shastamodoc/index.html?camera=AxisPineCreek&v=81e002f",
     "user-agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
 }
 
-# TIME = "1591654200"
-# TIMESTAMP = str(int(TIME))
-
-TIMESTAMP = str(int(datetime.datetime.utcnow().timestamp()))
 
 
-MYSTRING = "{}{}{}/{}".format(HOST, URLBASE, CAMERA, FILENAME)
-# MYSTRING = MYSTRING+TIMESTAMP
 
-# print(MYSTRING)
+
+
 def get_image(filenumber):
+    TIMESTAMP = str(int(datetime.datetime.utcnow().timestamp()))
+    MYSTRING = "{}{}{}/{}".format(HOST, URLBASE, camera, FILENAME)
     while True:
         try:
             r = requests.get(MYSTRING, headers=HEADERS, timeout=30)
@@ -35,6 +33,9 @@ def get_image(filenumber):
             r.raise_for_status()
         except requests.exceptions.HTTPError as errh:
             print("Http Error:", errh)
+            if r.status_code == 403:
+                print("403 error may indicate unknown camera name.")
+            sys.exit(1)
         except requests.exceptions.ConnectionError as errc:
             print("Error Connecting:", errc)
         except requests.exceptions.Timeout as errt:
@@ -43,13 +44,32 @@ def get_image(filenumber):
             print("OOps: Something Else", err)
         time.sleep(60)
 
-    filenum = "{:04d}".format(filenumber)
-    with open((CAMERA + "-" + filenum + ".jpg"), "wb") as fd:
+#    filenum = "{:04d}".format(filenumber)
+#    with open((camera + "-" + TIMESTAMP + ".jpg"), "wb") as fd:
+    filename = camera + "-" + TIMESTAMP + ".jpg"
+    with open(filename, "wb") as fd:
         for chunk in r.iter_content(chunk_size=128):
             fd.write(chunk)
-    print(CAMERA + "-" + filenum + ".jpg written.")
 
 
-for i in range(COUNT):
+#    print(CAMERA + "-" + filenum + ".jpg written.")
+
+parser = argparse.ArgumentParser()
+parser.add_argument("camera", help="Camera name to capture")
+parser.add_argument("count", help="Number of frames to capture")
+parser.add_argument("delay", help="Delay in seconds between frame captures")
+
+args = parser.parse_args()
+
+camera = args.camera
+count = int(args.count)
+delay = float(args.delay)
+
+
+for i in range(count):
     get_image(i)
-    time.sleep(DELAY)
+    try:
+        time.sleep(delay)
+    except KeyboardInterrupt:
+        print("Exiting politely.")
+        sys.exit(0)

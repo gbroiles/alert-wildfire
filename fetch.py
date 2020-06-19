@@ -1,37 +1,55 @@
+#!/usr/bin/python3
+#
 import datetime
 import requests
 
+CAMERAS = ["AntelopeMtn", "AntelopeYreka1", "AntelopeYreka2", "BaldMtnButte1",
+        "BaldMtnButte2", "BearMtnShasta", "Beckworth", "BloomerLookout1",
+        "BloomerLookout2", "ButtLake", "ChineseWall", "Cohasset",
+        "Cohasset2", "Concow", "Constantia", "DoeMillRd", "Ducket",
+        "Dulcinea", "DyerMtn1", "DyerMtn2", "EaglesNest", "EastQuincy",
+        "Falcon", "FleaMtn", "HamiltonMtn1", "HamiltonMtn2", "HammondRanch", 
+        "Hayfork", "Hayfork2", "HerdPeak", "HighlineTrail", "HollySugar1",
+        "HollySugar2", "JarboGap", "Weed", "LexingtonHill", "LexingtonHill2",
+        "MeadowValley", "MtBradley1", "MtBradley2", "NorthPortola", "OregonMt",
+        "OregonMt2", "OrovilleCaStParks", "PenmanPeak1", "PenmanPeak2", 
+        "PineCreek", "PlatteMtn1", "PlatteMtn2", "RainbowLake", "RattlesnakePeak",
+        "RichardsonSprings", "RoundMtnPaskenta", "RoundMtnPaskenta2", 
+        "RoundMtnShasta", "SaintJohn1", "SaintJohn2", "SawmillLookout",
+        "ShafferMtn", "ShastaLake1","ShastaLake2","ShastaSkiPark",
+        "Shingletown","SloatMtn","SodaRidge1","SodaRidge2","SouthForks",
+        "SouthForks2","SugarloafShasta","SugarloafShasta2","SunsetHill1",
+        "SunsetHill2","TuscanButte","TuscanButte2","Weed1","Weed2",
+        "WestPeak1","WestPeak2"
+        ]
+
 HOST = "https://s3-us-west-2.amazonaws.com"
 # URLBASE = "/alertwildfire-data-public/Axis-Elsinore2/latest_full.jpg?x-request-time="
-URLBASE = "/alertwildfire-data-public/"
-CAMERA = "Axis-PineCreek"
+URLBASE = "/alertwildfire-data-public/Axis-"
+#CAMERA = "PineCreek"
 FILENAME = "latest_full.jpg"
 HEADERS = {
     "referer": "http://www.alertwildfire.org/shastamodoc/index.html?camera=AxisPineCreek&v=81e002f",
     "user-agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
 }
 
-# TIME = "1591654200"
-# TIMESTAMP = str(int(TIME))
 
-TIMESTAMP = str(int(datetime.datetime.utcnow().timestamp()))
+for camera in CAMERAS:
+    timestamp = str(int(datetime.datetime.utcnow().timestamp()))
+    mystring = "{}{}{}/{}".format(HOST, URLBASE, camera, FILENAME)
+#    print(mystring)
+#    continue
+
+#    r = ""
+
+#    r = requests.get(mystring, headers=HEADERS, verify=False)
+    r = requests.get(mystring, headers=HEADERS)
 
 
-MYSTRING = "{}{}{}/{}".format(HOST, URLBASE, CAMERA, FILENAME)
-# MYSTRING = MYSTRING+TIMESTAMP
-
-print(MYSTRING)
-
-r = ""
-
-r = requests.get(MYSTRING, headers=HEADERS, verify=False)
-
-print(r.status_code)
-
-if r.status_code == 200:
-    with open((CAMERA + "-" + TIMESTAMP + ".jpg"), "wb") as fd:
-        for chunk in r.iter_content(chunk_size=128):
-            fd.write(chunk)
-else:
-    print("Not writing file.")
-
+    if r.status_code == 200:
+        filename = "/home/gbroiles/projects/alert-wildfire/multi/" + camera + "-" + timestamp + ".jpg"
+        with open(filename, "wb") as fd:
+            for chunk in r.iter_content(chunk_size=128):
+                fd.write(chunk)
+    else:
+        print(camera+" "+str(r.status_code))
