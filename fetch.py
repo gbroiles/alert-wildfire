@@ -48,6 +48,7 @@ CAMERAS = [
     "OregonMt",
     "OregonMt2",
     "OrovilleCaStParks",
+    "Paynes",
     "PenmanPeak1",
     "PenmanPeak2",
     "PineCreek",
