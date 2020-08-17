@@ -11,6 +11,7 @@ CAMERAS = [
     "BaldMtnButte2",
     "BearMtnShasta",
     "Beckworth",
+    "Beckworth2",
     "BloomerLookout1",
     "BloomerLookout2",
     "ButtLake",
@@ -26,6 +27,7 @@ CAMERAS = [
     "DyerMtn2",
     "EaglesNest",
     "EastQuincy",
+    "Eighmy",
     "Falcon",
     "FleaMtn",
     "HamiltonMtn1",
@@ -37,6 +39,7 @@ CAMERAS = [
     "HighlineTrail",
     "HollySugar1",
     "HollySugar2",
+    "InksRidge",
     "JarboGap",
     "Weed",
     "LexingtonHill",
@@ -83,6 +86,7 @@ CAMERAS = [
     "Weed2",
     "WestPeak1",
     "WestPeak2",
+    "YankeeHill",
 ]
 
 HOST = "https://s3-us-west-2.amazonaws.com"
